@@ -1,0 +1,56 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-flud mt-4">
+  <div class  = "row">
+
+    <div class="col-lg-3">
+        <div class="list-group">
+            <a href="/" class="list-group-item list-group-item-action ">All products</a>
+            {% for category in category %}
+            <a href="/?category={{category.id}}" class="list-group-item list-group-item-action ">{{category.id}} {{category.name}}</a>
+            {% endfor %}
+        </div>
+     
+
+    </div>
+
+    <!--Product-->
+    <div id="product" class="col-lg-9">
+        <div class="row mx-auto">
+            {% for product in product %}
+            <div class="card mx-auto mb-3" style="width:18rem;">
+                <img src="{{product.image.url}}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h4 class="card-title">{{product.name}}</h4>
+                    <h6 class="card-title">₹. {{product.price}}</h6>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
+
+
+   
+
+
+
+
+
+  
+
+    
+       
+  
+
+
+
+
