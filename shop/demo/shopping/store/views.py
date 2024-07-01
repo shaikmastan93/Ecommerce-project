@@ -7,21 +7,31 @@ from .models import Product, Category, Customer
 
 def home(request):
     products =None
-    category = Category.get_all_categories()
+    if request.session.has_key("phone"):
+        phone = request.session['phone']
+        category = Category.get_all_categories()
+        customer = Customer.objects.filter(phone=phone)
+        for c in customer:
+            name = c.name
+            categoryID = request.GET.get('category')
+            if categoryID:
+              products = Product.get_all_product_by_category_id(categoryID)
+        
 
-    categoryID = request.GET.get('category')
-    if categoryID:
-        products = Product.get_all_product_by_category_id(categoryID)
+            else:
+                products = Product.get_all_products()
+               
+    
 
+
+                data = {}
+                data ['name'] = name
+                data['product'] = products
+                data['category'] = category
+                print('You are',request.session.get('phone'))
+                return render(request,'home.html',data)
     else:
-        products = Product.get_all_products()
-
-
-    data = {}
-    data['product'] = products
-    data['category'] = category
-    print('You are',request.session.get('phone'))
-    return render(request,'home.html',data)
+        return redirect('login')
 
 
         
@@ -80,5 +90,14 @@ def productdetail(request,pk):
     product = Product.objects.get(pk=pk)
     return render(request,'productdetail.html',{'product':product})
 
-        
+def Logout(request):
+    if 'phone' in request.session:
+        del request.session['phone']
+    return redirect('login')
+
+   
+   
+   
+    
+
         
