@@ -20,6 +20,7 @@ def home(request):
     data = {}
     data['product'] = products
     data['category'] = category
+    print('You are',request.session.get('phone'))
     return render(request,'home.html',data)
 
 
@@ -36,6 +37,7 @@ class Login(View):
         customer = Customer.objects.filter(phone=phone).first()
 
         if customer:
+            request.session['phone']=phone
             return redirect('homepage')
         else:
             error_message = "Mobile number is invalid"
