@@ -8,3 +8,14 @@ class Customer(models.Model):
     
     def register(self):
         self.save()
+        
+        
+    def isExists(self):
+        if Customer.objects.filter(phone = self.phone):
+            return True
+        else:
+            return False
+        
+        
+            
+        
