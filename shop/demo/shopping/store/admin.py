@@ -16,3 +16,4 @@ class AdminCustomer(admin.ModelAdmin):
 admin.site.register(Product,AdminProduct)
 admin.site.register(Category)
 admin.site.register(Customer,AdminCustomer)
+admin.site.register(Cart)
