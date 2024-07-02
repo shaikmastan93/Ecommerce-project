@@ -11,9 +11,12 @@ class AdminProduct(admin.ModelAdmin):
 class AdminCustomer(admin.ModelAdmin):
     list_display = ['id','name','phone']
 
+class AdminCart(admin.ModelAdmin):
+    list_display = ['id','phone','product','image','price']
+
 
 # Register your models here.
 admin.site.register(Product,AdminProduct)
 admin.site.register(Category)
 admin.site.register(Customer,AdminCustomer)
-admin.site.register(Cart)
+admin.site.register(Cart,AdminCart)

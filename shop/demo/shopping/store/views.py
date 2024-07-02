@@ -1,16 +1,19 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
-from .models import Product, Category, Customer
+from .models import Product, Category, Customer,Cart
+from django.db.models import Q
 
 # Create your views here.
 
 def home(request):
     products =None
+    totalitem = 0
     if request.session.has_key("phone"):
         phone = request.session['phone']
         category = Category.get_all_categories()
         customer = Customer.objects.filter(phone=phone)
+        totalitem=len(Cart.objects.filter(phone=phone))
         for c in customer:
             name = c.name
             categoryID = request.GET.get('category')
@@ -28,6 +31,7 @@ def home(request):
                 data ['name'] = name
                 data['product'] = products
                 data['category'] = category
+                data['totalitem'] = totalitem
                 print('You are',request.session.get('phone'))
                 return render(request,'home.html',data)
     else:
@@ -87,13 +91,57 @@ class Signup(View):
         
         
 def productdetail(request,pk):
+    totalitem = 0
     product = Product.objects.get(pk=pk)
-    return render(request,'productdetail.html',{'product':product})
+    item_already_in_cart = False
+    if request.session.has_key('phone'):
+        phone = request.session['phone']
+        totalitem=len(Cart.objects.filter(phone=phone))
+        item_already_in_cart =Cart.objects.filter(Q(product=product.id) & Q(phone=phone)).exists()
+        customer = Customer.objects.filter(phone=phone)
+        for c in customer:
+            name = c.name
+        data = {'product':product,'item_already_in_cart': item_already_in_cart,'name':name,'totalitem':totalitem}
+        return render(request,'productdetail.html',data)
 
 def Logout(request):
     if 'phone' in request.session:
         del request.session['phone']
     return redirect('login')
+
+
+def add_to_cart(request):
+    phone = request.session['phone']
+    product_id = request.GET.get('prod_id')
+    product_name = Product.objects.get(id=product_id)
+    product = Product.objects.filter(id=product_id)
+    for p in product:
+        image=p.image
+        price=p.price
+        Cart(phone=phone,product=product_name,image=image,price=price).save()
+        return redirect(f"/product-detail/{product_id}")
+    
+
+
+
+def show_cart(request):
+    totalitem=0
+    if request.session.has_key('phone'):
+        phone = request.session["phone"]
+        totalitem = len(Cart.objects.filter(phone=phone))
+        customer = Customer.objects.filter(phone=phone)
+        for c in customer:
+            name = c.name
+            cart=Cart.objects.filter(phone=phone)
+            data = {'name':name,'totalitem':totalitem,'cart':cart}
+            if cart:
+                return render(request,'show_cart.html',data)
+            else:
+                pass
+
+
+
+
 
    
    

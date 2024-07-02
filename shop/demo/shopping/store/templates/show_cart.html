@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Cart {% endblock title %}
+{% block content %}
+
+
+<div class="container">
+    <div class="border rounded p-4 m-4">
+        <p class="display-4 pl-4 ml-4">My Cart</p>
+        <hr>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sr no.</th>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th></th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for cart in cart %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td><image style="height: 80px;" class="rounded-circle" src="{{cart.product.image.url}}" alt=""></image></td>
+                    <td>{{ cart.product.name }}</td>
+                    <td>{{ cart.quantyity}}</td>
+                    <td>₹.{{cart.prodcut.price}}</td>
+
+                    <td><input type="button" class="minus-cart btn" value="-"</td>
+                    <td><span id="quantity">{{cart.quantity}}</span></td>
+                    <td><input type="button" class=" plus-cart btn" value="+"</td>
+                    <td><input type="button" class=" btn btn-danger btn-sm remove-cart" value="Delete"</td>
+                    
+
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+        <hr>
+        <div class="m-3  p-3">
+            <a href="#" class="btn btn-outline-info border rounded col-lg-3 float-left">Check Out</a>
+
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
