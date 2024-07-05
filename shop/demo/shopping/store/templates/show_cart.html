@@ -3,7 +3,6 @@
 {% block title %} Cart {% endblock title %}
 {% block content %}
 
-
 <div class="container">
     <div class="border rounded p-4 m-4">
         <p class="display-4 pl-4 ml-4">My Cart</p>
@@ -16,37 +15,87 @@
                     <th>Product Name</th>
                     <th>Qty</th>
                     <th>Price</th>
-                    <th></th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                {%for cart in cart %}
+                {% for cart in cart %}
                 <tr>
-                    <td>{{forloop.counter}}</td>
-                    <td><image style="height: 80px;" class="rounded-circle" src="{{cart.product.image.url}}" alt=""></image></td>
+                    <td>{{ forloop.counter }}</td>
+                    <td><img style="height: 80px;" class="rounded-circle" src="{{ cart.product.image.url }}" alt=""></td>
                     <td>{{ cart.product.name }}</td>
-                    <td>{{ cart.quantyity}}</td>
-                    <td>₹.{{cart.prodcut.price}}</td>
-
-                    <td><input type="button" class="minus-cart btn" value="-"</td>
-                    <td><span id="quantity">{{cart.quantity}}</span></td>
-                    <td><input type="button" class=" plus-cart btn" value="+"</td>
-                    <td><input type="button" class=" btn btn-danger btn-sm remove-cart" value="Delete"</td>
-                    
-
+                    <td>{{ cart.quantity }}</td>
+                    <td>₹{{ cart.product.price }}</td>
+                    <td>
+                        <input type="button" pid="{{ cart.product.id }}" class="minus-cart btn btn-primary" value="-">
+                        <span>{{ cart.quantity }}</span>
+                        <input type="button" pid="{{ cart.product.id }}" class="plus-cart btn btn-primary" value="+">
+                    </td>
+                    <td><input type="button"  pid="{{ cart.product.id }}"  class="btn btn-danger btn-sm remove-cart" value="Delete"></td>
                 </tr>
+                {% endfor %}
             </tbody>
-            {% endfor %}
         </table>
         <hr>
-        <div class="m-3  p-3">
+        <div class="m-3 p-3">
             <a href="#" class="btn btn-outline-info border rounded col-lg-3 float-left">Check Out</a>
-
-
         </div>
-
     </div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(".plus-cart").click(function() {
+        var id = $(this).attr("pid");
+        console.log(id); // Check if the id is correctly logged
+
+        $.ajax({
+            type: "GET",
+            url: "/plus-cart",
+            data: {
+                prod_id: id
+            },
+            success: function(data) {
+                console.log(data); // Check the response from the server
+            }
+        });
+    });
+
+    $(".minus-cart").click(function() {
+        var id = $(this).attr("pid").toString;
+        console.log(id); // Check if the id is correctly logged
+
+        $.ajax({
+            type: "GET",
+            url: "/minus-cart",
+            data: {
+                prod_id: id
+            },
+            success: function(data) {
+                console.log(data); // Check the response from the server
+            }
+        });
+    });
+
+    $(".remove-cart").click(function() {
+        var id = $(this).attr("pid").toString;
+        console.log(id); // Check if the id is correctly logged
+        var eml=this
+
+        $.ajax({
+            type: "GET",
+            url: "/remove-cart",
+            data: {
+                prod_id: id
+            },
+            success: function(data) {
+                console.log(data); // Check the response from the server
+                $(mythis).closest("tr").fadeOut();
+            }
+        });
+    });
+
+
+</script>
 
 {% endblock %}

@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.views import View
 from .models import Product, Category, Customer,Cart
 from django.db.models import Q
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -139,6 +140,35 @@ def show_cart(request):
             else:
                 pass
 
+def plus_cart(request):
+    if request.session.has_key('phone'):
+        phone = request.session["phone"]
+        product_id = request.GET['prod_id']
+        cart = Cart.objects.get(Q(product=product_id) & Q(phone=phone))
+        cart.quantity += 1
+        cart.save()
+        data = {'quantity': cart.quantity}  # Corrected reference to cart.quantity
+        return JsonResponse(data)
+    
+def minus_cart(request):
+    if request.session.has_key('phone'):
+        phone = request.session["phone"]
+        product_id = request.GET['prod_id']
+        cart = Cart.objects.get(Q(product=product_id) & Q(phone=phone))
+        cart.quantity -= 1
+        cart.save()
+        data = {'quantity': cart.quantity}  # Corrected reference to cart.quantity
+        return JsonResponse(data)
+    
+def remove_cart(request):
+    if request.session.has_key('phone'):
+        phone = request.session["phone"]
+        product_id = request.GET['prod_id']
+        cart = Cart.objects.get(Q(product=product_id) & Q(phone=phone))
+       
+        cart.delete()
+        
+        return JsonResponse()
 
 
 
