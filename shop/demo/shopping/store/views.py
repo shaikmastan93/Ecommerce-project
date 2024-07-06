@@ -138,7 +138,7 @@ def show_cart(request):
             if cart:
                 return render(request,'show_cart.html',data)
             else:
-                pass
+                return render(request,'emty_cart.html',data)
 
 def plus_cart(request):
     if request.session.has_key('phone'):
