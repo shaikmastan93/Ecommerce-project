@@ -62,7 +62,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="" method=POST>
+          <form action="/checkout" method="POST">
             {% csrf_token %}
             <div class="form-group mt-3">
                 <label>Name</label>
@@ -78,13 +78,12 @@
                 <label>Mobile</label>
                 <input required type="text" name="mobile" id="name" class="form-control" placeholder="Enter your Mobile Number">
             </div>
+            <input type="submit" class="btn btn-outline-info border rounded col-lg-3 flaot-right mt-3"  value="Make Payment">
 
           </form>
+          
         </div>
-        <div class="modal-footer">
-
-          <button type="button" class="btn btn-primary">Make Payment</button>
-        </div>
+        
       </div>
     </div>
   </div>

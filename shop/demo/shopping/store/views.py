@@ -169,6 +169,22 @@ def remove_cart(request):
         cart.delete()
         
         return JsonResponse()
+    
+def checkout(request):
+    if request.session.has_key('phone'):
+        phone = request.session['phone']
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        mobile = request.POST.get('mobile')
+        cart_product = Cart.objects.filter(phone=phone)
+        for c in cart_product:
+            qty=c.quantity
+            price = c.price
+            product_name = c.name
+            image = c.image
+        print(name,address,mobile)
+        return render(request, 'show_cart.html')
+    
 
 
 
